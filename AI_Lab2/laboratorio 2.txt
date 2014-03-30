@@ -1,0 +1,29 @@
+== Idea ==
+L'idea è quella di salvare nel contesto un modello così composto
+
++-----------------------------+
+|            Sala             |
++-----------------------------+
++ String nome                 +
++ Map <Long, String> booking  +
++-----------------------------+
+
+nome è il nome della sala. La mappa ha come chiave il timestamp della prenotazione (se la chiave dev'essere univoca nella mappa, come credo che sia, questo risolve il problema del non poter prenotare una sala in uno slot temporale già occupato) e come valore l'utente che ha prenotato. Al deployment dell'applicazione salvo nel contesto dell'applicazione un modello che è un array di 4 sale.
+
+A questo punto è tutta in discesa. calendar.jsp deve diventare un form che permette di selezionare giorno, mese e anno. In base a quanto selezionato viene fuori una tabella <tr><td> cazzi e mazzi tipo Google Calendar, fatta più o meno così
+
+
+                  LUNEDI      MARTEDI      MERCOLEDI      GIOVEDI      VENERDI      SABATO      DOMENICA
+08.00 - 09.00     [XXXXX]                  [XXXXX] 	                            [XXXXX]
+09.00 - 10.00                [XXXXX]       
+10.00 - 11.00                                             [XXXXX]                   [XXXXX]
+...
+17.00 - 18.00
+
+La semplificazione che vi sono solo slot di un'ora è relativa al testo dell'esercitazione in cui ciascuno può prenotare una stanza solo per un'ora. Ogni slot ha dei  link del tipo prenota?room=S1&day=30&month=03&year=2014&startTime=11 e annulla?room=S1&day=30&month=03&year=2014&startTime=11 - prenota è per tutti se lo slot è vuoto, annulla è per chi ha prenotato e per gli amministratori - attraverso i quali, grazie a http://stackoverflow.com/questions/9582999/how-to-access-url-parameters-in-action-classes-struts-2, ci si può divertire per fare le migliori cose.
+
+La gestione amministrativa possiamo anche implementarla a metà, l'importante secondo me è fare questo. 
+
+== Bug ==
+- Se chiamo 127.0.0.1:8080/AI_Lab2/resetPassword devo essere sfanculato in anticipo quando non sono loggato. Ho provato a fare una grezza in reset.jsp ma non gli piace molto. Trovare un modo.
+- ${qualcosa} funziona bene come il mio ginocchio sinistro, almeno sul mio Eclipse. Quindi uso massiccio di JSP.

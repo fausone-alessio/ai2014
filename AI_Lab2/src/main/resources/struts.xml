@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+"-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+"http://struts.apache.org/dtds/struts-2.0.dtd">
+ 
+<struts>
+ 	<constant name="struts.devMode" value="true" />
+ 	<constant name="struts.custom.i18n.resources" value="global" />
+ 	
+	<package name="AI_Lab2" extends="struts-default">
+		
+        <action name="login" class="it.polito.ai14.lab.action.LoginAction">
+            <result name="success">/WEB-INF/views/user.jsp</result>
+            <result name="error">/WEB-INF/views/login.jsp</result>
+            <result name="input">/WEB-INF/views/login.jsp</result>
+            <result name="force">/WEB-INF/views/reset.jsp</result>
+        </action>
+        
+		<action name="logout" class="it.polito.ai14.lab.action.LogoutAction">
+            <result name="success">/index.jsp</result>
+        </action>
+        
+        <action name="resetPassword" class="it.polito.ai14.lab.action.ResetPasswordAction">
+        	<result name="success">/WEB-INF/views/user.jsp</result>
+        	<result name="input">/WEB-INF/views/reset.jsp</result>
+        </action>
+        
+        <action name="calendar" class="it.polito.ai14.lab.action.CalendarAction">
+            <result>/WEB-INF/views/calendar.jsp</result>
+        </action>
+		
+	</package>
+</struts>
