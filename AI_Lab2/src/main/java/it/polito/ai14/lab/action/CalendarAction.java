@@ -10,26 +10,29 @@ import org.apache.struts2.ServletActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 
 public class CalendarAction extends ActionSupport {
+	
 	private static final long serialVersionUID = 2777557863534616656L;
-	private Integer startTime;
-	private Integer endTime;
-	private Integer day;
-	private Integer month;
 	private Integer year;
 	private Integer week;
+	private String room;
 	
 	public String execute() {
-
-		if(week == null || year == null || week < 1 || week > 53) {
-			return ERROR;
-		}
 		Calendar cal = Calendar.getInstance();
+		
+		if(week == null || week < 1 || week > 53) {
+			week = cal.get(Calendar.WEEK_OF_YEAR);
+		}
+		
+		if(year == null || year < cal.get(Calendar.YEAR)) {
+			year = cal.get(Calendar.YEAR);
+		}
+		
 		cal.clear();
 		cal.set(Calendar.YEAR, year);
 		cal.set(Calendar.WEEK_OF_YEAR, week);
 		
 		Map<Integer, Map<Date, String>> slots = new TreeMap<Integer, Map<Date,String>>();
-		for(int hour=0;hour<24;hour++) {
+		for(int hour = 0; hour < 24; hour++) {
 			Map<Date, String> days = new TreeMap<Date, String>();
 			slots.put(hour, days);
 			for(int day = 0; day < 7; day++) {
@@ -41,33 +44,6 @@ public class CalendarAction extends ActionSupport {
 		ServletActionContext.getRequest().setAttribute("slots", slots);
 
 		return SUCCESS;
-	}
-
-	public Integer getStartTime() {
-		return startTime;
-	}
-	public void setStartTime(Integer startTime) {
-		this.startTime = startTime;
-	}
-	public Integer getEndTime() {
-		return endTime;
-	}
-	public void setEndTime(Integer endTime) {
-		this.endTime = endTime;
-	}
-	public Integer getDay() {
-		return day;
-	}
-	public void setDay(Integer day) {
-		this.day = day;
-	}
-
-	public Integer getMonth() {
-		return month;
-	}
-
-	public void setMonth(Integer month) {
-		this.month = month;
 	}
 
 	public Integer getYear() {
@@ -84,6 +60,14 @@ public class CalendarAction extends ActionSupport {
 
 	public void setWeek(Integer week) {
 		this.week = week;
+	}
+
+	public String getRoom() {
+		return room;
+	}
+
+	public void setRoom(String room) {
+		this.room = room;
 	}
 
 }

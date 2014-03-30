@@ -19,21 +19,41 @@
 	<table border="1">
 	<% Map<Integer, Map<Date, String>> slots = (Map<Integer, Map<Date, String>>) request.getAttribute("slots");
 		out.println("<tr><td>Orari</td>");
-		SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 		for(Map.Entry<Date, String> day : slots.get(0).entrySet()) {
-			out.println("<td>"+df.format(day.getKey())+"</td>");
+			out.println("<td>"+sdf.format(day.getKey())+"</td>");
 		}
 		out.println("</tr>");
 		Calendar cal = Calendar.getInstance();
 		cal.clear();
-		df = new SimpleDateFormat("HH:mm");
+		
+		sdf = new SimpleDateFormat("HH:mm");
+		SimpleDateFormat sdf2 = new SimpleDateFormat("H");
+		SimpleDateFormat sdf3 = new SimpleDateFormat("dd");
+		SimpleDateFormat sdf4 = new SimpleDateFormat("MM");
+		SimpleDateFormat sdf5 = new SimpleDateFormat("yyyy");
+		
 		for(Map.Entry<Integer,Map<Date, String>> hour : slots.entrySet()) {
-			cal.set(Calendar.HOUR_OF_DAY,hour.getKey());
-			out.println("<tr><td>"+df.format(cal.getTime())+"</td>");
+			//TODO Da cambiare 17/5/2014.
+			cal.set(Calendar.DAY_OF_MONTH, 17);
+			cal.set(Calendar.MONTH, 5);
+			cal.set(Calendar.YEAR, 2014);
+			cal.set(Calendar.HOUR_OF_DAY, hour.getKey());
+			out.println("<tr><td>"+ sdf.format(cal.getTime())+"</td>");
+			
 			for(Map.Entry<Date,String> day : hour.getValue().entrySet()) {
-				out.println("<td>"+day.getValue()+"</td>");
+				// TODO Ovviamente qui bisogna mettere un if che mostri il link per prenotare solo se lo slot è libero.
+				// TODO room glielo passiamo in sessione?
+				out.println("<td>"+ "<a href=\"prenota?" +
+									"day=" +  sdf3.format(cal.getTime()) +
+									"&month=" + sdf4.format(cal.getTime()) +
+									"&year=" + sdf5.format(cal.getTime()) +
+									"&hour="+ sdf2.format(cal.getTime()) + 
+									"&room=xx\">" +
+				"[P]</a>"+"</td>");
+				
 			}
-			out.println("<\tr>");
+			out.println("</tr>");
 		}
 	%>
 	</table>
@@ -45,9 +65,9 @@
 		name="room" 
 		value="3" />
 		
-		<s:select key="settimana"
+		<s:select key="week"
 		list="#{'1':'Settimana 1', '2':'Settimana 2', '3':'Settimana 3', '4':'Settimana 4'}" 
-		name="settimana" 
+		name="week" 
 		value="1" />
 		
 		<s:submit />
