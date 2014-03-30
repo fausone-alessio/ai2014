@@ -1,0 +1,33 @@
+Applicazioni Internet 2013-14
+Esercitazione 2
+
+Un’applicazione web permette la gestione condivisa di quattro sale riunioni 
+(chiamate “S1”, “S2”, “S3” e “S4”) ai dipendenti di un’azienda.
+Le stanze possono essere prenotate per un intervallo di tempo pari ad un’ora
+a partire dallo scoccare di una nuova ora (cioè, è lecito prenotare dalle 8.00 alle 9.00,
+ma non dalle 8.20 alle 9.20).
+Per garantire un accesso equo alle sale, ogni dipendente può avere, al massimo,
+quattro prenotazioni pendenti (ovvero riferite ad un momento futuro).
+Attraverso l’applicazione, è possibile consultare il calendario delle prenotazioni,
+effettuare una nuova prenotazione (se la stanza cercata è libera e non si è superato il limite
+delle prenotazioni da parte del dipendente) o cancellarne una esistente (se fatta dalla stessa
+persona che la sta cancellando).
+La consultazione dello stato della sala è accessibile a tutti, mentre le operazioni di
+prenotazione e cancellazione richiedono un’autenticazione tramite utente/password.
+L’applicazione distingue due tipologie di utenti: quelli semplici e gli amministratori.
+Questi ultimi possono compiere le stessa azioni degli altri ma, in aggiunta,
+possono anche cancellare una prenotazione altrui, aggiungere un nuovo utente
+(sia semplice che amministratore), cambiare il ruolo di un utente ed eliminarlo.
+La password degli amministratori scade ogni mese: raggiunta la scadenza, al primo login utile,
+qualunque azione abbia richiesto l’amministratore, sarà ridiretto ad una pagina in cui potrà
+inserire le nuove credenziali.
+
+Si realizzi tale applicazione utilizzando il framework Apache Struts 2.
+L’interfaccia utente dovrebbe permettere una navigazione semplice tra le varie date del
+calendario, presentando una vista compatta dello stato delle prenotazioni e fornire comandi
+chiaramente comprensibili per eseguire i diversi compiti.
+Si assuma che l’elenco degli utenti abilitati all’uso dell’applicazione con le relative
+credenziali sia memorizzato nel file di testo “WEB-INF/users.txt”  e si mantenga in modello
+con le prenotazioni esistenti all’interno di un JavaBean con visibilità a livello di
+applicazione: si faccia attenzione al fatto che tale oggetto deve garantire la correttezza e
+la consistenza dei dati che incapsula a fronte di operazioni concorrenti. 
