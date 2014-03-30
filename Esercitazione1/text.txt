@@ -1,0 +1,16 @@
+Un’applicazione web permette l’accesso contingentato ad un insieme di file di elevate dimensioni
+ (ad esempio filmati).
+Data la mole dei dati da trasferire, si vuole evitare che singoli client possano accedere ad
+una risorsa pubblicata più di una volta all’ora. Inoltre si vuole limitare l’accesso a persone
+fisiche, evitando che robot o altri strumenti automatici possano fare accesso ai contenuti
+pubblicati.
+A tale scopo, l’applicazione web propone una pagina di accesso tramite la quale l’utente può
+scegliere il file cui è interessato e confermare la propria fisicità decodificando un’immagine
+“captcha” che presenta, debitamente distorto, un testo casuale che dovrà essere inserito
+in un apposito campo. All’invio dei dati, se il testo è corretto e se dall’indirizzo IP del
+client non è stato effettuato nessun trasferimento nell’ora precedente, viene trasferito il
+contenuto, aggiornando correttamente le informazioni lato server.
+I contenuti pubblicati sono memorizzati nella cartella  “WEB-INF/files”; l’applicazione dovrà
+dinamicamente creare l’elenco dei contenuti a partire dai file presenti in tale cartella.
+Facoltativamente, si aggiunga un limitatore di banda che limiti a 64kbit/s la velocità dei dati
+trasferiti all’utente finale.
