@@ -1,18 +1,14 @@
 package it.polito.ai14.lab;
 
+import java.util.Date;
 import java.util.concurrent.ConcurrentHashMap;
 
 /* http://stackoverflow.com/questions/567068/java-synchronized-block-vs-collections-synchronizedmap */
 /* Inviare una mail a Malnati */
 
-/* Nella HashMap Long � il timestamp in secondi della prenotazione, mentre String � l'username che
- * ha prenotato quella sala. */
-
 public class Sala {
 	private String nome;
-	private ConcurrentHashMap  <Long, String> prenotazioni = new ConcurrentHashMap <Long, String>();
-	
-	public Sala(){};
+	private ConcurrentHashMap  <Date, String> prenotazioni = new ConcurrentHashMap <Date, String>();
 	
 	public String getNome() {
 		return nome;
@@ -20,10 +16,10 @@ public class Sala {
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
-	public ConcurrentHashMap  <Long, String> getPrenotazioni() {
+	public ConcurrentHashMap  <Date, String> getPrenotazioni() {
 		return prenotazioni;
 	}
-	public void setPrenotazioni(ConcurrentHashMap  <Long, String> prenotazioni) {
+	public void setPrenotazioni(ConcurrentHashMap  <Date, String> prenotazioni) {
 		this.prenotazioni = prenotazioni;
 	}
 }
