@@ -2,6 +2,10 @@
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="java.util.Calendar"%>
 <%@page import="java.util.Map"%>
+<%@page import="java.util.ArrayList"%> <%@page import="java.util.List"%>
+<%@page import="java.util.Iterator"%>
+<%@page import="java.util.Set"%>
+
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="s" uri="/struts-tags"%>
@@ -17,44 +21,38 @@
 	<p>Benvenuto <%= session.getAttribute("username") %> [<%= session.getAttribute("ruolo") %>] </p>
 	
 	<table border="1">
-	<% Map<Integer, Map<Date, String>> slots = (Map<Integer, Map<Date, String>>) request.getAttribute("slots");
-		out.println("<tr><td>Orari</td>");
-		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-		for(Map.Entry<Date, String> day : slots.get(0).entrySet()) {
-			out.println("<td>"+sdf.format(day.getKey())+"</td>");
+	<% Map<Date, String> slots = (Map<Date, String>) request.getAttribute("slots");
+	int days_in_week = 7;
+	Iterator <Date> itPR = slots.keySet().iterator();
+	SimpleDateFormat sdfPR = new SimpleDateFormat ("dd/MM/yyyy");
+	
+	out.println("<tr>");
+	for (int cc = 0; cc < days_in_week + 1; cc++) {
+		if (cc == 0) out.println("<td></td>");
+		else out.println("<td>"+sdfPR.format(itPR.next())+"</td>");
+	}
+	out.println("</tr>");
+	
+	int cc = 0;
+	String riga = "";
+	Iterator <Date> itTB = slots.keySet().iterator();
+	SimpleDateFormat sdfPC = new SimpleDateFormat ("HH:mm");
+	SimpleDateFormat sdfTB = new SimpleDateFormat ("'day='dd'&month='MM'&year='yyyy'&startTime='HH'&room=1'");
+	while (itTB.hasNext()) {
+		Date data = itTB.next();
+		if ((cc % (days_in_week + 1)) == 0) {
+			riga = "<td>" + sdfPC.format(data) + "</td>";
+			cc++;
 		}
-		out.println("</tr>");
-		Calendar cal = Calendar.getInstance();
-		cal.clear();
-		
-		sdf = new SimpleDateFormat("HH:mm");
-		SimpleDateFormat sdf2 = new SimpleDateFormat("H");
-		SimpleDateFormat sdf3 = new SimpleDateFormat("dd");
-		SimpleDateFormat sdf4 = new SimpleDateFormat("MM");
-		SimpleDateFormat sdf5 = new SimpleDateFormat("yyyy");
-		
-		for(Map.Entry<Integer,Map<Date, String>> hour : slots.entrySet()) {
-			//TODO Da cambiare 17/5/2014.
-			cal.set(Calendar.DAY_OF_MONTH, 17);
-			cal.set(Calendar.MONTH, 5);
-			cal.set(Calendar.YEAR, 2014);
-			cal.set(Calendar.HOUR_OF_DAY, hour.getKey());
-			out.println("<tr><td>"+ sdf.format(cal.getTime())+"</td>");
-			
-			for(Map.Entry<Date,String> day : hour.getValue().entrySet()) {
-				// TODO Ovviamente qui bisogna mettere un if che mostri il link per prenotare solo se lo slot è libero.
-				// TODO room glielo passiamo in sessione?
-				out.println("<td>"+ "<a href=\"prenota?" +
-									"day=" +  sdf3.format(cal.getTime()) +
-									"&month=" + sdf4.format(cal.getTime()) +
-									"&year=" + sdf5.format(cal.getTime()) +
-									"&hour="+ sdf2.format(cal.getTime()) + 
-									"&room=xx\">" +
-				"[P]</a>"+"</td>");
-				
-			}
-			out.println("</tr>");
+		// TODO Se c'è una stringa nel valore di slot bisogna fargli stampare un link diverso.
+		// TODO Bisogna dunque cambiare l'iteratore che agisce anche sui value.
+		// TODO Oppure farne due per - a mio parere -  migliorare la leggibilità e aggiornarli parallelamente.
+		riga = riga + "<td><a href=booking?" + sdfTB.format(data) + ">[P]</a></td>";
+		cc++;
+		if ((cc % (days_in_week + 1)) == 0) {
+			out.println("<tr>" + riga + "</tr>");
 		}
+	}
 	%>
 	</table>
 	
@@ -65,9 +63,9 @@
 		name="room" 
 		value="3" />
 		
-		<s:select key="week"
+		<s:select key="settimana"
 		list="#{'1':'Settimana 1', '2':'Settimana 2', '3':'Settimana 3', '4':'Settimana 4'}" 
-		name="week" 
+		name="settimana" 
 		value="1" />
 		
 		<s:submit />
