@@ -2,11 +2,11 @@ package it.polito.ai14.lab.action;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.TreeMap;
 
 import org.apache.struts2.ServletActionContext;
-
 import com.opensymphony.xwork2.ActionSupport;
 
 public class CalendarAction extends ActionSupport {
@@ -14,36 +14,39 @@ public class CalendarAction extends ActionSupport {
 	private static final long serialVersionUID = 2777557863534616656L;
 	private Integer year;
 	private Integer week;
-	private String room;
+	private Integer room;
 	
 	public String execute() {
-		Calendar cal = Calendar.getInstance();
-		
-		if(week == null || week < 1 || week > 53) {
-			week = cal.get(Calendar.WEEK_OF_YEAR);
-		}
-		
-		if(year == null || year < cal.get(Calendar.YEAR)) {
-			year = cal.get(Calendar.YEAR);
-		}
-		
-		cal.clear();
-		cal.set(Calendar.YEAR, year);
-		cal.set(Calendar.WEEK_OF_YEAR, week);
-		
-		Map<Integer, Map<Date, String>> slots = new TreeMap<Integer, Map<Date,String>>();
-		for(int hour = 0; hour < 24; hour++) {
-			Map<Date, String> days = new TreeMap<Date, String>();
-			slots.put(hour, days);
-			for(int day = 0; day < 7; day++) {
-				cal.add(Calendar.DAY_OF_YEAR, 1);
-				days.put(cal.getTime(), "");
-			}
-			cal.add(Calendar.DAY_OF_YEAR, -7);
-		}
-		ServletActionContext.getRequest().setAttribute("slots", slots);
 
+		Calendar calendario = new GregorianCalendar();
+		calendario.set(Calendar.YEAR, year);
+		calendario.set(Calendar.WEEK_OF_YEAR, week);
+		calendario.set(Calendar.HOUR_OF_DAY, 8);
+		calendario.set(Calendar.MINUTE, 00);
+		
+		Map <Date, String> slots = new LinkedHashMap<Date, String>();
+		for (int ora = 0; ora < 15; ora++) {
+			for (int giorno = 0; giorno < 7; giorno++) {
+				slots.put(calendario.getTime(), "Lorem ipsum");
+				calendario.add(Calendar.DAY_OF_YEAR, 1);
+			}
+			calendario.add(Calendar.HOUR_OF_DAY, 1);
+			calendario.set(Calendar.WEEK_OF_YEAR, week);
+		}
+
+		ServletActionContext.getRequest().setAttribute("slots", slots);
 		return SUCCESS;
+	}
+	
+	public void validate() {
+		if(week == null || week < 1 || week > 53)
+			week = Calendar.getInstance().get(Calendar.WEEK_OF_YEAR);
+		
+		if(year == null || year < Calendar.getInstance().get(Calendar.YEAR))
+			year = Calendar.getInstance().get(Calendar.YEAR);
+		
+		if(room == null)
+			room = 1;	
 	}
 
 	public Integer getYear() {
@@ -61,13 +64,15 @@ public class CalendarAction extends ActionSupport {
 	public void setWeek(Integer week) {
 		this.week = week;
 	}
-
-	public String getRoom() {
+	public Integer getRoom() {
 		return room;
 	}
 
-	public void setRoom(String room) {
+	public void setRoom(Integer room) {
 		this.room = room;
 	}
+	
+
+
 
 }
