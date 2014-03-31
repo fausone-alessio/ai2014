@@ -35,8 +35,12 @@ public class CalendarAction extends ActionSupport {
 		calendario.set(Calendar.MONTH, month - 1);
 		calendario.set(Calendar.DAY_OF_MONTH, day);
 		calendario.set(Calendar.HOUR_OF_DAY, 8);
+		
 		calendario.add(Calendar.DAY_OF_YEAR, spiazzamento);
-			
+		year = calendario.get(Calendar.YEAR);
+		month = calendario.get(Calendar.MONTH) + 1;
+		day = calendario.get(Calendar.DAY_OF_MONTH);
+		
 		String prenotante = "";
 		Map <Date, String> slots = new LinkedHashMap<Date, String>();
 		for (int ora = 0; ora < 15; ora++) {
@@ -66,7 +70,7 @@ public class CalendarAction extends ActionSupport {
 				spiazzamento = 0;
 			if (jump.equalsIgnoreCase("prev"))
 				spiazzamento = -7;
-			if (jump.equalsIgnoreCase("prev"))
+			if (jump.equalsIgnoreCase("next"))
 				spiazzamento = 7;
 		}
 		else spiazzamento = 0;

@@ -1,6 +1,7 @@
 <%@page import="java.util.Date"%> <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="java.util.Calendar"%> <%@page import="java.util.Map"%> 
 <%@page import="java.util.Iterator"%> <%@page import="java.util.Set"%>
+<%@page import="java.util.Locale"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="s" uri="/struts-tags"%>
@@ -37,20 +38,30 @@
 	<s:url id="contextUrl" action="" namespace="" />
 	<a href="<s:property 
 				value="#contextUrl"/>
-					/calendar.action?jump=prev">
+					/calendar.action?
+					day=<s:property value="day"/>
+					&month=<s:property value="month"/>
+					&year=<s:property value="year"/>
+					&room=<s:property value="room"/>
+					&jump=prev">
 						&#9668;&#9668; - 7 gg.
 	</a>
 	&#9679;
 	<a href="<s:property 
 				value="#contextUrl"/>
-					/calendar.action?jump=next">
+					/calendar.action?
+					day=<s:property value="day"/>
+					&month=<s:property value="month"/>
+					&year=<s:property value="year"/>
+					&room=<s:property value="room"/>
+					&jump=next">
 						+ 7 gg. &#9658;&#9658; 
 	</a>
 	<%! @SuppressWarnings("unchecked") %>
 	<%  Map<Date, String> slots = (Map<Date, String>) request.getAttribute("slots");
 	int days_in_week = 7;
 	Iterator <Date> itPR = slots.keySet().iterator();
-	SimpleDateFormat sdfPR = new SimpleDateFormat ("dd/MM/yyyy");
+	SimpleDateFormat sdfPR = new SimpleDateFormat ("EEE dd/MM/yyyy", Locale.ITALY);
 	out.println("<table border=\"1\">");
 	out.println("\t<tr>");
 	for (int cc = 0; cc < days_in_week + 1; cc++) {
