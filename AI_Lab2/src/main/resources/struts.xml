@@ -9,7 +9,7 @@
  	
 	<package name="AI_Lab2" extends="struts-default">
 		
-        <action name="login" class="it.polito.ai14.lab.action.LoginAction">
+        <action name="login_*" method="{1}" class="it.polito.ai14.lab.action.LoginAction">
             <result name="success">/WEB-INF/views/user.jsp</result>
             <result name="error">/WEB-INF/views/login.jsp</result>
             <result name="input">/WEB-INF/views/login.jsp</result>
