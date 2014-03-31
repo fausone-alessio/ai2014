@@ -20,8 +20,10 @@ public class CalendarAction extends ActionSupport {
 	private Integer day;
 	private Integer month;
 	private Integer year;
-	private Integer week;
 	private Integer room;
+	
+	private String jump;
+	private int spiazzamento;
 	
 	public String execute() {
 		ServletContext servletContext = ServletActionContext.getServletContext();  
@@ -30,9 +32,11 @@ public class CalendarAction extends ActionSupport {
 		Calendar calendario = new GregorianCalendar();
 		calendario.clear();
 		calendario.set(Calendar.YEAR, year);
-		calendario.set(Calendar.WEEK_OF_YEAR, week);
+		calendario.set(Calendar.MONTH, month - 1);
+		calendario.set(Calendar.DAY_OF_MONTH, day);
 		calendario.set(Calendar.HOUR_OF_DAY, 8);
-		
+		calendario.add(Calendar.DAY_OF_YEAR, spiazzamento);
+			
 		String prenotante = "";
 		Map <Date, String> slots = new LinkedHashMap<Date, String>();
 		for (int ora = 0; ora < 15; ora++) {
@@ -45,7 +49,9 @@ public class CalendarAction extends ActionSupport {
 				calendario.add(Calendar.DAY_OF_YEAR, 1);
 			}
 			calendario.add(Calendar.HOUR_OF_DAY, 1);
-			calendario.set(Calendar.WEEK_OF_YEAR, week);
+			calendario.set(Calendar.YEAR, year);
+			calendario.set(Calendar.MONTH, month - 1);
+			calendario.set(Calendar.DAY_OF_MONTH, day);
 		}
 		ServletActionContext.getRequest().setAttribute("slots", slots);
 		
@@ -53,70 +59,66 @@ public class CalendarAction extends ActionSupport {
 	}
 	
 	public void validate() {
-		if(year == null || year < Calendar.getInstance().get(Calendar.YEAR))
-			year = Calendar.getInstance().get(Calendar.YEAR);
+		Calendar oggi = Calendar.getInstance();
 		
-		week = Calendar.getInstance().get(Calendar.WEEK_OF_YEAR);
+		if (jump != null && !jump.isEmpty()) {
+			if (!jump.equalsIgnoreCase("prev") && !jump.equalsIgnoreCase("next"))
+				spiazzamento = 0;
+			if (jump.equalsIgnoreCase("prev"))
+				spiazzamento = -7;
+			if (jump.equalsIgnoreCase("prev"))
+				spiazzamento = 7;
+		}
+		else spiazzamento = 0;
+		
+		if(year == null)
+			year = oggi.get(Calendar.YEAR);
+		if(month == null)
+			month = oggi.get(Calendar.MONTH);
+		if(day == null)
+			day = oggi.get(Calendar.DAY_OF_MONTH);
+		
+		Calendar scelta = new GregorianCalendar();
+		scelta.clear();
+		scelta.set(Calendar.YEAR, year);
+		scelta.set(Calendar.MONTH, month);
+		scelta.set(Calendar.DAY_OF_MONTH, day);
+		
+		if (scelta.getTimeInMillis() < oggi.getTimeInMillis()) {	
+			year = oggi.get(Calendar.YEAR);
+			month = oggi.get(Calendar.MONTH) + 1;
+			day = oggi.get(Calendar.DAY_OF_MONTH);
+		}
 		
 		if(room == null)
 			room = 1;
 	}
 	
-	public Integer getPrevWeek() {
-		if ((week - 1) <= 0){
-			return getLastWeekOfYear(year - 1);
-		} else {
-			return week - 1;
-		}
-	}
-	
-	public Integer getPrevYear() {
-		if ((week - 1) <= 0){
-			return year - 1;
-		} else {
-			return year;
-		}
-	}
-	
-	public Integer getNextWeek() {
-		if ((week + 1) > getLastWeekOfYear(year)){
-			return 1;
-		} else {
-			return week + 1;
-		}
-	}
-	
-	public Integer getNextYear() {
-		if ((week + 1) > getLastWeekOfYear(year)){
-			return year + 1;
-		} else {
-			return year;
-		}
-	}
-	
-	private Integer getLastWeekOfYear(Integer year) {
-		Calendar cal = Calendar.getInstance();
-		cal.clear();
-		cal.set(Calendar.MONTH,11);
-		cal.set(Calendar.DAY_OF_MONTH, 25);
-		cal.set(Calendar.YEAR, year);
-		return cal.get(Calendar.WEEK_OF_YEAR);
-	}
+
 
 	public Integer getYear() {
 		return year;
 	}
-
 	public void setYear(Integer year) {
 		this.year = year;
 	}
-
-	public Integer getWeek() {
-		return week;
+	public Integer getMonth() {
+		return month;
 	}
-
-	public void setWeek(Integer week) {
-		this.week = week;
+	public void setMonth(Integer month) {
+		this.month = month;
+	}
+	public Integer getDay() {
+		return day;
+	}
+	public void setDay(Integer day) {
+		this.day = day;
+	}
+	public String getJump() {
+		return jump;
+	}
+	public void setJump(String jump) {
+		this.jump = jump;
 	}
 	public Integer getRoom() {
 		return room;
