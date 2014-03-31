@@ -14,12 +14,38 @@
 <body>
 	<p>Benvenuto <%= session.getAttribute("username") %> [<%= session.getAttribute("ruolo") %>] </p>
 	
-	Settimana corrente : <s:property value="week"/> / <s:property value="year"/><br/>
+	Prenotazioni della sala S<s:property value="room+1"/>
+		
+	<s:form action="calendar" method="POST"> 
 	
+		<% // TODO Qui non si può segliere il value in base alla property room? %>
+		<s:select key="room"
+		list="#{'0':'S1', '1':'S2', '2':'S3', '3':'S4'}" 
+		name="room" 
+		value="3" />
+		
+		<s:textfield key="day" />
+		<% // TODO Mettere una bella select %>
+		<s:textfield key="month" />
+		<s:textfield key="year" />
+		
+		<s:submit />
+		
+	</s:form>
+	<br>
+	Scorrimento rapido
 	<s:url id="contextUrl" action="" namespace="" />
-	<a href="<s:property value="#contextUrl"/>/calendar.action?week=<s:property value="prevWeek"/>&year=<s:property value="prevYear"/>">&lt;&lt;Settimana precedente</a> --- 
-	<a href="<s:property value="#contextUrl"/>/calendar.action?week=<s:property value="nextWeek"/>&year=<s:property value="nextYear"/>">&gt;&gt;Settimana successiva</a><br/>
-	
+	<a href="<s:property 
+				value="#contextUrl"/>
+					/calendar.action?jump=prev">
+						&#9668;&#9668; - 7 gg.
+	</a>
+	&#9679;
+	<a href="<s:property 
+				value="#contextUrl"/>
+					/calendar.action?jump=next">
+						+ 7 gg. &#9658;&#9658; 
+	</a>
 	<%! @SuppressWarnings("unchecked") %>
 	<%  Map<Date, String> slots = (Map<Date, String>) request.getAttribute("slots");
 	int days_in_week = 7;
@@ -63,21 +89,6 @@
 	}
 	out.println("</table>");
 	%>
-		
-	<s:form action="calendar" method="POST"> 
-	
-		<s:select key="room"
-		list="#{'0':'S1', '1':'S2', '2':'S3', '3':'S4'}" 
-		name="room" 
-		value="3" />
-		
-		<s:select key="week"
-		list="#{'1':'Settimana 1', '2':'Settimana 2', '3':'Settimana 3', '4':'Settimana 4'}" 
-		name="week" 
-		value="1" />
-		
-		<s:submit />
-	</s:form>
 	
 </body>
 </html>
