@@ -8,7 +8,6 @@ import java.util.Map;
 
 import org.apache.struts2.ServletActionContext;
 
-import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 
 public class CalendarAction extends ActionSupport {
@@ -36,12 +35,6 @@ public class CalendarAction extends ActionSupport {
 			calendario.set(Calendar.WEEK_OF_YEAR, week);
 		}
 		ServletActionContext.getRequest().setAttribute("slots", slots);
-		ServletActionContext.getRequest().setAttribute("nextWeek", getNextWeek());
-		ServletActionContext.getRequest().setAttribute("nextYear", getNextYear());
-		ServletActionContext.getRequest().setAttribute("prevWeek", getPrevWeek());
-		ServletActionContext.getRequest().setAttribute("prevYear", getPrevYear());
-		ActionContext.getContext().getSession().put("week", week);
-		ActionContext.getContext().getSession().put("year", year);
 		
 		
 
@@ -60,7 +53,7 @@ public class CalendarAction extends ActionSupport {
 			room = 1;
 	}
 	
-	private Integer getPrevWeek() {
+	public Integer getPrevWeek() {
 		if ((week - 1) <= 0){
 			return getLastWeekOfYear(year - 1);
 		} else {
@@ -68,7 +61,7 @@ public class CalendarAction extends ActionSupport {
 		}
 	}
 	
-	private Integer getPrevYear() {
+	public Integer getPrevYear() {
 		if ((week - 1) <= 0){
 			return year - 1;
 		} else {
@@ -76,7 +69,7 @@ public class CalendarAction extends ActionSupport {
 		}
 	}
 	
-	private Integer getNextWeek() {
+	public Integer getNextWeek() {
 		if ((week + 1) > getLastWeekOfYear(year)){
 			return 1;
 		} else {
@@ -84,7 +77,7 @@ public class CalendarAction extends ActionSupport {
 		}
 	}
 	
-	private Integer getNextYear() {
+	public Integer getNextYear() {
 		if ((week + 1) > getLastWeekOfYear(year)){
 			return year + 1;
 		} else {
@@ -96,7 +89,7 @@ public class CalendarAction extends ActionSupport {
 		Calendar cal = Calendar.getInstance();
 		cal.clear();
 		cal.set(Calendar.MONTH,11);
-		cal.set(Calendar.DAY_OF_MONTH, 31);
+		cal.set(Calendar.DAY_OF_MONTH, 25);
 		cal.set(Calendar.YEAR, year);
 		return cal.get(Calendar.WEEK_OF_YEAR);
 	}
