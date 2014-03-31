@@ -19,6 +19,10 @@
 <body>
 	<p>Benvenuto <%= session.getAttribute("username") %> [<%= session.getAttribute("ruolo") %>] </p>
 	
+	<s:url id="contextUrl" action="" namespace="" />
+	<a href="<s:property value="#contextUrl"/>/calendar.action?week=<%= request.getAttribute("prevWeek") %>&year=<%= request.getAttribute("prevYear") %>">&lt;&lt;Settimana precedente</a> --- 
+	<a href="<s:property value="#contextUrl"/>/calendar.action?week=<%= request.getAttribute("nextWeek") %>&year=<%= request.getAttribute("nextYear") %>">&gt;&gt;Settimana successiva</a><br/>
+	
 	<table border="1">
 	<%! @SuppressWarnings("unchecked") %>
 	<%  Map<Date, String> slots = (Map<Date, String>) request.getAttribute("slots");
