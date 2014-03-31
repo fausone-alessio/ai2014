@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 package it.polito.ai14.lab.action;
 
 import java.util.Calendar;
