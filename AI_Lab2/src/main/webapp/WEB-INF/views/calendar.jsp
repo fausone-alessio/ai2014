@@ -2,7 +2,6 @@
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="java.util.Calendar"%>
 <%@page import="java.util.Map"%>
-<%@page import="java.util.ArrayList"%> <%@page import="java.util.List"%>
 <%@page import="java.util.Iterator"%>
 <%@page import="java.util.Set"%>
 
@@ -21,7 +20,8 @@
 	<p>Benvenuto <%= session.getAttribute("username") %> [<%= session.getAttribute("ruolo") %>] </p>
 	
 	<table border="1">
-	<% Map<Date, String> slots = (Map<Date, String>) request.getAttribute("slots");
+	<%! @SuppressWarnings("unchecked") %>
+	<%  Map<Date, String> slots = (Map<Date, String>) request.getAttribute("slots");
 	int days_in_week = 7;
 	Iterator <Date> itPR = slots.keySet().iterator();
 	SimpleDateFormat sdfPR = new SimpleDateFormat ("dd/MM/yyyy");
@@ -36,18 +36,21 @@
 	int cc = 0;
 	String riga = "";
 	Iterator <Date> itTB = slots.keySet().iterator();
+	Iterator <String> itsTB = slots.values().iterator();
 	SimpleDateFormat sdfPC = new SimpleDateFormat ("HH:mm");
 	SimpleDateFormat sdfTB = new SimpleDateFormat ("'day='dd'&month='MM'&year='yyyy'&startTime='HH'&room=1'");
 	while (itTB.hasNext()) {
 		Date data = itTB.next();
+		String prenotante = itsTB.next();
+		
 		if ((cc % (days_in_week + 1)) == 0) {
 			riga = "<td>" + sdfPC.format(data) + "</td>";
 			cc++;
 		}
-		// TODO Se c'è una stringa nel valore di slot bisogna fargli stampare un link diverso.
-		// TODO Bisogna dunque cambiare l'iteratore che agisce anche sui value.
-		// TODO Oppure farne due per - a mio parere -  migliorare la leggibilità e aggiornarli parallelamente.
-		riga = riga + "<td><a href=booking?" + sdfTB.format(data) + ">[P]</a></td>";
+		if (prenotante != null && !prenotante.isEmpty())
+			riga = riga + "<td><a href=prenotazione?" + sdfTB.format(data) + ">[P]</a></td>";
+		else
+			riga = riga + "<td><a href=annullamento?" + sdfTB.format(data) + ">[P]</a></td>";
 		cc++;
 		if ((cc % (days_in_week + 1)) == 0) {
 			out.println("<tr>" + riga + "</tr>");
