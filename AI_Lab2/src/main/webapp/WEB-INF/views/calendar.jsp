@@ -9,6 +9,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
+
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Calendario prenotazioni</title>
 </head>
@@ -20,7 +21,7 @@
 			<a href="<s:property value="#contextUrl"/>/logout.action">Logout</a>
 		</s:if>
 		<s:else>
-	    	<a href="<s:property value="#contextUrl"/>/login.action">Log In</a> per poter effettuare prenotazioni
+	    	<a href="<s:property value="#contextUrl"/>/login.action">Login</a> per poter effettuare prenotazioni
 		</s:else>
 	</p>
 	
@@ -83,7 +84,8 @@
 	Iterator <Date> itTB = slots.keySet().iterator();
 	Iterator <String> itsTB = slots.values().iterator();
 	SimpleDateFormat sdfPC = new SimpleDateFormat ("HH:mm");
-	SimpleDateFormat sdfTB = new SimpleDateFormat ("'day='dd'&amp;month='MM'&amp;year='yyyy'&amp;startTime='HH'&amp;room="+request.getAttribute("room")+"'");
+	int r = (Integer) request.getAttribute("room");
+	SimpleDateFormat sdfTB = new SimpleDateFormat ("'day='dd'&amp;month='MM'&amp;year='yyyy'&amp;startTime='HH'&amp;room="+r+"'");
 	boolean loggedIn = session.getAttribute("username") != null;
 	while (itTB.hasNext()) {
 		Date data = itTB.next();
@@ -96,15 +98,15 @@
 		
 		if (prenotante != null && !prenotante.isEmpty()) {
 			if (loggedIn && prenotante.equals(session.getAttribute("username")))
-				riga = riga + "\n<td style=\"background-color:#f00;\"><a href=annullamento?" + sdfTB.format(data) + ">[Annulla]</a></td>";
+				riga = riga + "\n<td class=\"occupata\"><a href=annullamento?" + sdfTB.format(data) + ">[Annulla]</a></td>";
 			else
-				riga = riga + "\n<td style=\"background-color:#f00;\">[Occupata]</td>";		
+				riga = riga + "\n<td class=\"occupata\">[Occupata]</td>";		
 		}
 		else
 			if(loggedIn) {
-				riga = riga + "\n<td style=\"background-color:#0f0;\"><a href=\"prenotazione?" + sdfTB.format(data) + "\">[Prenota]</a></td>";
+				riga = riga + "\n<td class=\"libera\"><a href=\"prenotazione?" + sdfTB.format(data) + "\">[Prenota]</a></td>";
 			} else {
-				riga = riga + "\n<td style=\"background-color:#0f0;\">[Libera]</td>";		
+				riga = riga + "\n<td class=\"libera\">[Libera]</td>";		
 			}
 		cc++;
 		if ((cc % (days_in_week + 1)) == 0) {

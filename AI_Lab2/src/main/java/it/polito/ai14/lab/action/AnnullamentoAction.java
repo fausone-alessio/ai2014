@@ -2,6 +2,8 @@ package it.polito.ai14.lab.action;
 
 import it.polito.ai14.lab.Sala;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -45,6 +47,23 @@ public class AnnullamentoAction extends ActionSupport {
 			}
 		}
 		return SUCCESS;
+	}
+	
+	public void validate() {
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/YYYY");
+		sdf.setLenient(false);
+		try {
+			@SuppressWarnings("unused")
+			Date date = sdf.parse(day + "/" + month + "/" + year);
+		}
+		catch (ParseException e) {
+			addFieldError("year", "Data non valida");
+		}
+		
+		if (Integer.parseInt(room) < 0 || Integer.parseInt(room) > 3) {
+			System.out.println("Ciao belli");
+			addFieldError("room", "Stanza non valida");
+		}		
 	}
 	
 	

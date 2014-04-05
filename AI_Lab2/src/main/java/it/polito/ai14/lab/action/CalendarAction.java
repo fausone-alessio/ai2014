@@ -96,7 +96,7 @@ public class CalendarAction extends ActionSupport {
 		}
 		
 		if(room == null)
-			room = 1;
+			room = 0;
 	}
 	
 

@@ -40,6 +40,7 @@
 		<action name="prenotazione" class="it.polito.ai14.lab.action.PrenotazioneAction">
 			<interceptor-ref name="securityStack"></interceptor-ref>
 			<result type="redirectAction" name="success">/calendar.action?room=${room}</result>
+			<result name="input">/WEB-INF/views/calendar.jsp</result>
 			<result name="error">/index.jsp</result>
 			<result name="login">/WEB-INF/views/login.jsp</result>
 		</action>
@@ -47,6 +48,7 @@
 		<action name="annullamento" class="it.polito.ai14.lab.action.AnnullamentoAction">
 			<interceptor-ref name="securityStack"></interceptor-ref>
 			<result type="redirectAction" name="success">/calendar.action?room=${room}</result>
+			<result name="input">/WEB-INF/views/calendar.jsp</result>
 			<result name="error">/index.jsp</result>
 			<result name="login">/WEB-INF/views/login.jsp</result>
 		</action>

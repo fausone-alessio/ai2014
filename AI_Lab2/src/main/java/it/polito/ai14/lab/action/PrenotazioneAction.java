@@ -2,6 +2,8 @@ package it.polito.ai14.lab.action;
 
 import it.polito.ai14.lab.Sala;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -78,7 +80,19 @@ public class PrenotazioneAction extends ActionSupport {
 	}
 	
 	public void validate() {
-		// TODO Magari fare un check sulla validità dei parametri
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/YYYY");
+		sdf.setLenient(false);
+		try {
+			@SuppressWarnings("unused")
+			Date date = sdf.parse(day + "/" + month + "/" + year);
+		}
+		catch (ParseException e) {
+			addActionError("Data non valida");
+		}
+		
+		if (Integer.parseInt(room) < 0 || Integer.parseInt(room) > 3) {
+			addActionError("Stanza non valida");
+		}
 	}
 
 	public String getDay() {

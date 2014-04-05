@@ -1,0 +1,24 @@
+td.libera {
+	background-color: #00FF00;
+}
+
+td.libera a:link,
+td.libera a:visited,
+td.libera a:hover,
+td.libera a:active {
+	color: #FFFFFF;
+}
+
+td.occupata {
+	background-color: #000000;
+}
+
+td.occupata a:link,
+td.occupata a:visited,
+td.occupata a:hover,
+td.occupata a:active {
+	color: #FF0000;
+}
+
+
+
