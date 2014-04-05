@@ -5,7 +5,7 @@
 <html>
 <body>
 	<s:url id="contextUrl" action="" namespace="" />   
-	<h1>Prenotazione sale</h1>
+	<h2>Prenotazione sale</h2>
 	<a href="<s:property value="#contextUrl"/>/login.action">Login</a><br/>
 	<a href="<s:property value="#contextUrl"/>/calendar.action">Consulta Calendario</a>
 </body>

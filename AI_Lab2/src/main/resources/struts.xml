@@ -27,6 +27,12 @@
         
         <action name="prenotazione" class="it.polito.ai14.lab.action.PrenotazioneAction">
             <result name="success">/index.jsp</result>
+            <result name="error">/index.jsp</result>
+        </action>
+        
+		<action name="annullamento" class="it.polito.ai14.lab.action.AnnullamentoAction">
+            <result name="success">/index.jsp</result>
+            <result name="error">/index.jsp</result>
         </action>
         
 		<action name="calendar" class="it.polito.ai14.lab.action.CalendarAction">

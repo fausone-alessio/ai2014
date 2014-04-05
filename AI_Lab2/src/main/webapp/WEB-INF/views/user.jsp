@@ -9,7 +9,7 @@
 </head>
 <body>
         Benvenuto <%= session.getAttribute("username") %> [<%= session.getAttribute("ruolo") %>] <br>
-        <a href="booking">Prenotazione</a>
+        <a href="calendar">Prenotazione</a>
         <a href="logout">Esci</a>
 </body>
 </html>

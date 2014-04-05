@@ -23,7 +23,7 @@
 		<s:select key="room"
 		list="#{'0':'S1', '1':'S2', '2':'S3', '3':'S4'}" 
 		name="room" 
-		value="3" />
+		value="2" />
 		
 		<s:textfield key="day" />
 		<% // TODO Mettere una bella select %>
