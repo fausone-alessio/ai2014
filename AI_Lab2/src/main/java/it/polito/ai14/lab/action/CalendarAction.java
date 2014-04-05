@@ -58,6 +58,7 @@ public class CalendarAction extends ActionSupport {
 			calendario.set(Calendar.DAY_OF_MONTH, day);
 		}
 		ServletActionContext.getRequest().setAttribute("slots", slots);
+		ServletActionContext.getRequest().setAttribute("room", room);
 		
 		return SUCCESS;
 	}

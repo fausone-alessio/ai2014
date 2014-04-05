@@ -83,12 +83,8 @@
 	Iterator <Date> itTB = slots.keySet().iterator();
 	Iterator <String> itsTB = slots.values().iterator();
 	SimpleDateFormat sdfPC = new SimpleDateFormat ("HH:mm");
-	SimpleDateFormat sdfTB = new SimpleDateFormat ("'day='dd'&amp;month='MM'&amp;year='yyyy'&amp;startTime='HH'&amp;room=1'");
-	String prenota = "Prenota", annulla = "Annulla";
-	if(session.getAttribute("username") == null) {
-		prenota = "Libera";
-		annulla = "Occupata";
-	}
+	SimpleDateFormat sdfTB = new SimpleDateFormat ("'day='dd'&amp;month='MM'&amp;year='yyyy'&amp;startTime='HH'&amp;room="+request.getAttribute("room")+"'");
+	boolean loggedIn = session.getAttribute("username") != null;
 	while (itTB.hasNext()) {
 		Date data = itTB.next();
 		String prenotante = itsTB.next();
@@ -99,13 +95,17 @@
 		}
 		
 		if (prenotante != null && !prenotante.isEmpty()) {
-			if (prenotante.equals(session.getAttribute("username")))
-				riga = riga + "\n<td style=\"background-color:#f00;\"><a href=annullamento?" + sdfTB.format(data) + ">["+annulla+"]</a></td>";
+			if (loggedIn && prenotante.equals(session.getAttribute("username")))
+				riga = riga + "\n<td style=\"background-color:#f00;\"><a href=annullamento?" + sdfTB.format(data) + ">[Annulla]</a></td>";
 			else
-				riga = riga + "\n<td>[X]</td>";		
+				riga = riga + "\n<td style=\"background-color:#f00;\">[Occupata]</td>";		
 		}
 		else
-			riga = riga + "\n<td style=\"background-color:#0f0;\"><a href=\"prenotazione?" + sdfTB.format(data) + "\">["+prenota+"]</a></td>";
+			if(loggedIn) {
+				riga = riga + "\n<td style=\"background-color:#0f0;\"><a href=\"prenotazione?" + sdfTB.format(data) + "\">[Prenota]</a></td>";
+			} else {
+				riga = riga + "\n<td style=\"background-color:#0f0;\">[Libera]</td>";		
+			}
 		cc++;
 		if ((cc % (days_in_week + 1)) == 0) {
 			out.println("<tr>" + riga + "</tr>");
