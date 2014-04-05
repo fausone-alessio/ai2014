@@ -13,7 +13,16 @@
 <title>Calendario prenotazioni</title>
 </head>
 <body>
-	<p>Benvenuto <%= session.getAttribute("username") %> [<%= session.getAttribute("ruolo") %>] </p>
+	<s:url id="contextUrl" action="" namespace="" />
+	<p>
+		<s:if test="#session['username'] != null">
+			Benvenuto <%= session.getAttribute("username") %> [<%= session.getAttribute("ruolo") %>],
+			<a href="<s:property value="#contextUrl"/>/logout.action">Logout</a>
+		</s:if>
+		<s:else>
+	    	<a href="<s:property value="#contextUrl"/>/login.action">Log In</a> per poter effettuare prenotazioni
+		</s:else>
+	</p>
 	
 	Prenotazioni della sala S<s:property value="room+1"/>
 		
@@ -23,7 +32,7 @@
 		<s:select key="room"
 		list="#{'0':'S1', '1':'S2', '2':'S3', '3':'S4'}" 
 		name="room" 
-		value="2" />
+		value="room" />
 		
 		<s:textfield key="day" />
 		<% // TODO Mettere una bella select %>
@@ -35,7 +44,6 @@
 	</s:form>
 	<br>
 	Scorrimento rapido
-	<s:url id="contextUrl" action="" namespace="" />
 	<a href="<s:property 
 				value="#contextUrl"/>
 					/calendar.action?
@@ -76,6 +84,11 @@
 	Iterator <String> itsTB = slots.values().iterator();
 	SimpleDateFormat sdfPC = new SimpleDateFormat ("HH:mm");
 	SimpleDateFormat sdfTB = new SimpleDateFormat ("'day='dd'&amp;month='MM'&amp;year='yyyy'&amp;startTime='HH'&amp;room=1'");
+	String prenota = "Prenota", annulla = "Annulla";
+	if(session.getAttribute("username") == null) {
+		prenota = "Libera";
+		annulla = "Occupata";
+	}
 	while (itTB.hasNext()) {
 		Date data = itTB.next();
 		String prenotante = itsTB.next();
@@ -87,12 +100,12 @@
 		
 		if (prenotante != null && !prenotante.isEmpty()) {
 			if (prenotante.equals(session.getAttribute("username")))
-				riga = riga + "\n<td><a href=annullamento?" + sdfTB.format(data) + ">[A]</a></td>";
+				riga = riga + "\n<td style=\"background-color:#f00;\"><a href=annullamento?" + sdfTB.format(data) + ">["+annulla+"]</a></td>";
 			else
 				riga = riga + "\n<td>[X]</td>";		
 		}
 		else
-			riga = riga + "\n<td><a href=\"prenotazione?" + sdfTB.format(data) + "\">[P]</a></td>";
+			riga = riga + "\n<td style=\"background-color:#0f0;\"><a href=\"prenotazione?" + sdfTB.format(data) + "\">["+prenota+"]</a></td>";
 		cc++;
 		if ((cc % (days_in_week + 1)) == 0) {
 			out.println("<tr>" + riga + "</tr>");
