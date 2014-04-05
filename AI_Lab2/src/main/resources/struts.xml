@@ -8,36 +8,52 @@
  	<constant name="struts.custom.i18n.resources" value="global" />
  	
 	<package name="AI_Lab2" extends="struts-default">
-		
-        <action name="login_*" method="{1}" class="it.polito.ai14.lab.action.LoginAction">
-            <result name="success">/WEB-INF/views/user.jsp</result>
-            <result name="error">/WEB-INF/views/login.jsp</result>
-            <result name="input">/WEB-INF/views/login.jsp</result>
-            <result name="force">/WEB-INF/views/reset.jsp</result>
-        </action>
-        
+
+		<interceptors>
+			<interceptor name="security" class="it.polito.ai14.lab.interceptor.SecurityInterceptor" />
+			<interceptor-stack name="securityStack">
+				<interceptor-ref name="security" />
+				<interceptor-ref name="defaultStack" />
+			</interceptor-stack>
+		</interceptors>
+
+		<action name="login_*" method="{1}" class="it.polito.ai14.lab.action.LoginAction">
+			<result type="redirectAction" name="success">/calendar.action</result>
+			<result name="error">/WEB-INF/views/login.jsp</result>
+			<result name="input">/WEB-INF/views/login.jsp</result>
+			<result name="force">/WEB-INF/views/reset.jsp</result>
+		</action>
+
 		<action name="logout" class="it.polito.ai14.lab.action.LogoutAction">
-            <result name="success">/index.jsp</result>
-        </action>
-        
-        <action name="resetPassword" class="it.polito.ai14.lab.action.ResetPasswordAction">
-        	<result name="success">/WEB-INF/views/user.jsp</result>
-        	<result name="input">/WEB-INF/views/reset.jsp</result>
-        </action>
-        
-        <action name="prenotazione" class="it.polito.ai14.lab.action.PrenotazioneAction">
-            <result name="success">/index.jsp</result>
-            <result name="error">/index.jsp</result>
-        </action>
-        
+			<interceptor-ref name="securityStack"></interceptor-ref>
+			<result name="success">/index.jsp</result>
+			<result name="login">/WEB-INF/views/login.jsp</result>
+		</action>
+
+		<action name="resetPassword" class="it.polito.ai14.lab.action.ResetPasswordAction">
+			<interceptor-ref name="securityStack"></interceptor-ref>
+			<result name="success">/WEB-INF/views/user.jsp</result>
+			<result name="input">/WEB-INF/views/reset.jsp</result>
+			<result name="login">/WEB-INF/views/login.jsp</result>
+		</action>
+
+		<action name="prenotazione" class="it.polito.ai14.lab.action.PrenotazioneAction">
+			<interceptor-ref name="securityStack"></interceptor-ref>
+			<result type="redirectAction" name="success">/calendar.action</result>
+			<result name="error">/index.jsp</result>
+			<result name="login">/WEB-INF/views/login.jsp</result>
+		</action>
+
 		<action name="annullamento" class="it.polito.ai14.lab.action.AnnullamentoAction">
-            <result name="success">/index.jsp</result>
-            <result name="error">/index.jsp</result>
-        </action>
-        
+			<interceptor-ref name="securityStack"></interceptor-ref>
+			<result type="redirectAction" name="success">/calendar.action</result>
+			<result name="error">/index.jsp</result>
+			<result name="login">/WEB-INF/views/login.jsp</result>
+		</action>
+
 		<action name="calendar" class="it.polito.ai14.lab.action.CalendarAction">
-            <result>/WEB-INF/views/calendar.jsp</result>
-        </action>
-		
+			<result>/WEB-INF/views/calendar.jsp</result>
+		</action>
+
 	</package>
 </struts>
