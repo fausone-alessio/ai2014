@@ -1,0 +1,39 @@
+<!DOCTYPE web-app PUBLIC
+ "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+ "http://java.sun.com/dtd/web-app_2_3.dtd" >
+
+<web-app>
+	<display-name>Applicazioni Internet - Laboratorio 3</display-name>
+
+	<filter>
+		<filter-name>HibernateSessionFilter</filter-name>
+		<display-name>HibernateSessionFilter</display-name>
+		<description></description>
+		<filter-class>it.polito.ai14.lab.hibernate.HibernateSessionFilter</filter-class>
+	</filter>
+	<filter>
+		<filter-name>struts2</filter-name>
+		<filter-class>
+			org.apache.struts2.dispatcher.ng.filter.StrutsPrepareAndExecuteFilter
+		</filter-class>
+	</filter>
+
+	<filter-mapping>
+		<filter-name>HibernateSessionFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>struts2</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+	
+	<listener>
+		<listener-class>it.polito.ai14.lab.ApplicationManager</listener-class>
+	</listener>
+
+	<session-config>
+		<session-timeout>600</session-timeout>
+	</session-config>
+
+</web-app>
