@@ -4,14 +4,14 @@
 
 <web-app>
 	<display-name>Applicazioni Internet - Laboratorio 2</display-name>
- 
+
 	<filter>
 		<filter-name>struts2</filter-name>
 		<filter-class>
-                org.apache.struts2.dispatcher.ng.filter.StrutsPrepareAndExecuteFilter
-                </filter-class>
+			org.apache.struts2.dispatcher.ng.filter.StrutsPrepareAndExecuteFilter
+		</filter-class>
 	</filter>
- 
+
 	<filter-mapping>
 		<filter-name>struts2</filter-name>
 		<url-pattern>/*</url-pattern>
@@ -19,9 +19,9 @@
 	<listener>
 		<listener-class>it.polito.ai14.lab.ApplicationManager</listener-class>
 	</listener>
- 
+
 	<session-config>
 		<session-timeout>600</session-timeout>
 	</session-config>
-	
+
 </web-app>
