@@ -1,5 +1,5 @@
 package it.polito.ai14.lab.entities;
-import java.sql.Date;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -7,14 +7,15 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.Type;
 
-
 @Entity
-@Table(name="users", schema="dblab3")
+@Table(name="users")
 public class User {
-	private Long id;
+	private Integer id;
 	private String username;
 	private String password;
 	private Boolean admin;
@@ -22,10 +23,10 @@ public class User {
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
-	public Long getId() {
+	public Integer getId() {
 		return id;
 	}
-	public void setId(Long id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 	public String getUsername() {
@@ -47,8 +48,7 @@ public class User {
 	public void setAdmin(Boolean admin) {
 		this.admin = admin;
 	}
-	@Column
-	@Type(type="timestamp")
+	@Temporal(TemporalType.TIMESTAMP)
 	public Date getLastChange() {
 		return lastChange;
 	}

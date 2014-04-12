@@ -62,8 +62,8 @@ public class LoginAction extends ActionSupport {
 		try {
 			Session dbsession = HibernateUtils.getSessionFactory().getCurrentSession();
 			Query q = dbsession.createQuery("from it.polito.ai14.lab.entities.User as u where u.username = :username and u.password = :password");
-			q.setString(":username", username);
-			q.setString(":password", password);
+			q.setString("username", username);
+			q.setString("password", password);
 			@SuppressWarnings("unchecked")
 			List <User> users = (List <User>) q.list();
 			if (users.size() > 0) {
