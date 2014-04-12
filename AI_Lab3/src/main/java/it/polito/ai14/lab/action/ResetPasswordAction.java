@@ -1,15 +1,14 @@
 package it.polito.ai14.lab.action;
 
-import it.polito.ai14.lab.Costanti;
-
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
+
+import org.hibernate.Query;
+import org.hibernate.Session;
+
+import it.polito.ai14.lab.entities.User;
+import it.polito.ai14.lab.hibernate.HibernateUtils;
 
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
@@ -50,56 +49,29 @@ public class ResetPasswordAction extends ActionSupport {
 	}
 	
 	public String cambiaPassword(String username, String newPassword) {
-    	Map<String, Object> session = ActionContext.getContext().getSession();
-		ArrayList<String> lines = new ArrayList<String>();
-		String line = "";
-		String[] tupla;
-		String risultato = INPUT;
-		String ruolo = "A";
-		
+		Map<String, Object> session = ActionContext.getContext().getSession();
 		try {
-			File f = new File(Costanti.dbUtenti);
-			FileReader fr = new FileReader(f);
-			BufferedReader br = new BufferedReader(fr);
-			while ((line = br.readLine()) != null) {
-				tupla = line.split(";");
-				if (tupla[Costanti.UTENTE].equals(username)) {
-					if (tupla[Costanti.PWD].equals(newPassword)) {
-						risultato = INPUT;
-						lines.add(line);
-					}	
-					else {
-						String credenziali = tupla[Costanti.UTENTE] + ";" + newPassword + ";" + new Date().getTime() + ";" + tupla[Costanti.RUOLO];
-						lines.add(credenziali);
-						long orario = new Date().getTime() / 1000;
-						session.put("username", username);
-						session.put("ruolo", ruolo);
-						session.put("orario", orario);
-						risultato = SUCCESS;
-					}
+			Session dbsession = HibernateUtils.getSessionFactory().getCurrentSession();
+			Query q = dbsession.createQuery("from it.polito.ai14.lab.entities.User as u where u.username = :username");
+			q.setString("username", username);
+			@SuppressWarnings("unchecked")
+			List <User> users = (List <User>) q.list();
+			if (users.size() == 1) {
+				String oldPassword = users.get(0).getPassword();
+				if (oldPassword.compareTo(newPassword) != 0) {
+					users.get(0).setPassword(newPassword);
+					// TODO Settare la nuova data nel database
+					// TODO Settare il resto dei parametri nella sessione
+					session.put("orario", new Date().getTime() / 1000);
 				}
-				else
-					lines.add(line);
-			}	
-			
-			fr.close();
-			br.close();
-			
-			FileWriter fw = new FileWriter(f);
-            BufferedWriter out = new BufferedWriter(fw);
-            for(String s : lines)
-                 out.write(String.format(s + "%n"));
-            
-            out.flush();
-            out.close();
-            
-            return risultato;
-            
-		} catch (Exception e) {
-			risultato = INPUT;
+				else return INPUT;
+			}
+			else return ERROR;
 		}
-		
-		return risultato;
+		catch (Exception e) {
+			return ERROR;
+		}
+		return SUCCESS;
 	}
 
 }
