@@ -1,8 +1,8 @@
 package it.polito.ai14.lab.action;
 
 import it.polito.ai14.lab.Costanti;
+import it.polito.ai14.lab.entities.User;
 import it.polito.ai14.lab.hibernate.HibernateUtils;
-import it.polito.ai14.lab.hibernate.entities.User;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -61,9 +61,9 @@ public class LoginAction extends ActionSupport {
 		
 		try {
 			Session dbsession = HibernateUtils.getSessionFactory().getCurrentSession();
-			Query q = dbsession.createQuery("from User as u where u.username = :n and u.password = :p");
-			q.setString(":n", username);
-			q.setString(":p", password);
+			Query q = dbsession.createQuery("from it.polito.ai14.lab.entities.User as u where u.username = :username and u.password = :password");
+			q.setString(":username", username);
+			q.setString(":password", password);
 			@SuppressWarnings("unchecked")
 			List <User> users = (List <User>) q.list();
 			if (users.size() > 0) {

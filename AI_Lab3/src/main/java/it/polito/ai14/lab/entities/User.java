@@ -1,4 +1,4 @@
-package it.polito.ai14.lab.hibernate.entities;
+package it.polito.ai14.lab.entities;
 import java.sql.Date;
 
 import javax.persistence.Column;
@@ -10,8 +10,9 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.Type;
 
+
 @Entity
-@Table(name="users")
+@Table(name="users", schema="dblab3")
 public class User {
 	private Long id;
 	private String username;
