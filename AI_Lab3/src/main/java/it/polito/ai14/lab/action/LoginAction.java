@@ -66,19 +66,37 @@ public class LoginAction extends ActionSupport {
 			q.setString("password", password);
 			@SuppressWarnings("unchecked")
 			List <User> users = (List <User>) q.list();
-			if (users.size() > 0) {
-				long orario = (new Date().getTime())/1000;
-				// TODO Chiedere se si può salvare l'oggetto
+			
+			/* TODO Si discuteva in laboratorio di mettere direttamente
+			l'oggetto di tipo User in sessione. E' una cagata o è fattibile? */
+			if (users.size() == 1) {
 				session.put("username", username);
-				session.put("ruolo", "A");
-				session.put("orario", orario);
-				return SUCCESS;
+				// Non credo sia proprio precisissima questa gestione orari.
+				long now = new Date().getTime()/1000;
+				long lastChange = users.get(0).getLastChange().getTime()/1000;
+				if (users.get(0).getAdmin()) {
+					if (now - lastChange > 30*24*60*60) {
+						return FORCE;
+					}
+					else {
+						session.put("ruolo", "A");
+						session.put("orario", now);
+						return SUCCESS;
+					}
+				}
+				else {
+					session.put("ruolo", "U");
+					session.put("orario", now);
+					return SUCCESS;
+				}
 			}
-
+			else {
+				addActionError("Credenziali errate");
+				return ERROR;
+			}
 		}
 		catch (Exception e) {
 			return ERROR;
 		}
-		return ERROR;
 	}
 }
