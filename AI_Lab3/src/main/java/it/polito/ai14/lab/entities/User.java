@@ -1,16 +1,17 @@
 package it.polito.ai14.lab.entities;
 import java.util.Date;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-
-import org.hibernate.annotations.Type;
 
 @Entity
 @Table(name="users")
@@ -20,6 +21,7 @@ public class User {
 	private String password;
 	private Boolean admin;
 	private Date lastChange;
+	private Set<Booking> prenotazioni;
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
@@ -54,5 +56,10 @@ public class User {
 	}
 	public void setLastChange(Date lastChange) {
 		this.lastChange = lastChange;
+	}
+	
+	@OneToMany(mappedBy="IDUser")
+	public Set<Booking> getPrenotazioni() {
+		return prenotazioni;
 	}
 }

@@ -6,6 +6,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -15,7 +17,7 @@ import javax.persistence.TemporalType;
 public class Booking {
 	private Integer id;
 	private Date startTime;
-	private String room;
+	private Integer room;
 	private User IDUser;
 	
 	@Id
@@ -35,13 +37,15 @@ public class Booking {
 		this.startTime = startTime;
 	}
 	
-	public String getRoom() {
+	public Integer getRoom() {
 		return room;
 	}
-	public void setRoom(String room) {
+	public void setRoom(Integer room) {
 		this.room = room;
 	}
 	
+	@ManyToOne
+	@JoinColumn(name="IDUser")
 	public User getIDUser() {
 		return IDUser;
 	}
