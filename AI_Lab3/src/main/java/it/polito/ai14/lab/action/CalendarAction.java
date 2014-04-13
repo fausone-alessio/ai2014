@@ -1,6 +1,7 @@
 package it.polito.ai14.lab.action;
 
 import it.polito.ai14.lab.Sala;
+import it.polito.ai14.lab.hibernate.HibernateUtils;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -11,6 +12,8 @@ import java.util.Map;
 import javax.servlet.ServletContext;
 
 import org.apache.struts2.ServletActionContext;
+import org.hibernate.Query;
+import org.hibernate.Session;
 
 import com.opensymphony.xwork2.ActionSupport;
 
@@ -26,22 +29,26 @@ public class CalendarAction extends ActionSupport {
 	private int spiazzamento;
 	
 	public String execute() {
-		ServletContext servletContext = ServletActionContext.getServletContext();  
-		Sala[] palazzo = (Sala[]) servletContext.getAttribute("palazzo");
-		
+		Session dbsession = HibernateUtils.getSessionFactory().getCurrentSession();
+	
 		Calendar calendario = new GregorianCalendar();
 		calendario.clear();
 		calendario.set(Calendar.YEAR, year);
 		calendario.set(Calendar.MONTH, month - 1);
 		calendario.set(Calendar.DAY_OF_MONTH, day);
 		calendario.set(Calendar.HOUR_OF_DAY, 8);
-		
 		calendario.add(Calendar.DAY_OF_YEAR, spiazzamento);
+		
+		Query q = dbsession.createQuery("from it.polito.ai14.lab.entities.Booking as b where b.room = :room and b.date = :date");
+		q.setInteger("room", room);
+		q.setDate("date", calendario.getTime());
+		
 		year = calendario.get(Calendar.YEAR);
 		month = calendario.get(Calendar.MONTH) + 1;
 		day = calendario.get(Calendar.DAY_OF_MONTH);
-		
-		String prenotante = "";
+
+		// TODO Da cambiare quasi tutto. Bisogna solo tenersi la LinkedHashMap.
+/*		String prenotante = "";
 		Map <Date, String> slots = new LinkedHashMap<Date, String>();
 		for (int ora = 0; ora < 15; ora++) {
 			for (int giorno = 0; giorno < 7; giorno++) {
@@ -58,7 +65,7 @@ public class CalendarAction extends ActionSupport {
 			calendario.set(Calendar.DAY_OF_MONTH, day);
 		}
 		ServletActionContext.getRequest().setAttribute("slots", slots);
-		ServletActionContext.getRequest().setAttribute("room", room);
+		ServletActionContext.getRequest().setAttribute("room", room);*/
 		
 		return SUCCESS;
 	}

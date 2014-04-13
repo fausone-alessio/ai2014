@@ -1,6 +1,8 @@
 package it.polito.ai14.lab.action;
 
 import it.polito.ai14.lab.Sala;
+import it.polito.ai14.lab.entities.Booking;
+import it.polito.ai14.lab.hibernate.HibernateUtils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -8,6 +10,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -15,6 +18,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import javax.servlet.ServletContext;
 
 import org.apache.struts2.ServletActionContext;
+import org.hibernate.Query;
+import org.hibernate.Session;
 
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
@@ -31,7 +36,6 @@ public class PrenotazioneAction extends ActionSupport {
     	Map<String, Object> session = ActionContext.getContext().getSession();
     	
     	String utente = (String) session.get("username");
-    	Sala[] palazzo = (Sala[]) servletContext.getAttribute("palazzo");
     	Date oggi = Calendar.getInstance().getTime();
     
 		Calendar scelta = new GregorianCalendar();
@@ -41,18 +45,24 @@ public class PrenotazioneAction extends ActionSupport {
 		scelta.set(Calendar.DAY_OF_MONTH, Integer.parseInt(day));
 		scelta.set(Calendar.HOUR_OF_DAY, Integer.parseInt(startTime));
 		
-		// Scarta le prenotazioni nel passato
+		// Se tento di fare una prenotazione nel passato non vado avanti
     	if (oggi.compareTo(scelta.getTime()) > 0) {
 			return ERROR;	
     	}
     	
-    	// Scarta le prenotazioni fatte in uno slot già occupato
-    	ConcurrentHashMap <Date, String> tmpPrenotazioni = palazzo[Integer.parseInt(room)].getPrenotazioni();
-    	if (tmpPrenotazioni.containsKey(scelta.getTime())) {
+    	Session dbsession = HibernateUtils.getSessionFactory().getCurrentSession();
+		Query q = dbsession.createQuery("from it.polito.ai14.lab.entities.Booking as b where b.room = :room and b.date = :date");
+		q.setInteger("room", Integer.parseInt(room));
+		q.setDate("date", scelta.getTime());
+		@SuppressWarnings("unchecked")
+		List <Booking> bookings = q.list();
+		
+		// Se c'Ã¨ giÃ  una prenotazione in quello slot e per quella stanza non vado avanti
+		if (bookings.size() == 1) {
 			return ERROR;
     	}
     	
-    	int nPrenotazioni = 0;
+ /*   	int nPrenotazioni = 0;
     	for (Sala s: palazzo) {
     		ConcurrentHashMap <Date, String> prenotazioni = s.getPrenotazioni();
     		Set <Map.Entry<Date, String>> log = prenotazioni.entrySet();
@@ -65,7 +75,7 @@ public class PrenotazioneAction extends ActionSupport {
     			if (utentePrenotazione.equals(utente) && dataPrenotazione.compareTo(oggi) > 0) {
     				nPrenotazioni++;
     				if (nPrenotazioni == 4) {
-    					addActionError("Hai più di quattro prenotazioni pendenti");
+    					addActionError("Hai piï¿½ di quattro prenotazioni pendenti");
     					return ERROR;
     				}
     			}
@@ -75,7 +85,7 @@ public class PrenotazioneAction extends ActionSupport {
     	
 		ConcurrentHashMap <Date, String> prenotazioni = palazzo[Integer.parseInt(room)].getPrenotazioni();
     	prenotazioni.putIfAbsent(scelta.getTime(), utente);
-    	palazzo[Integer.parseInt(room)].setPrenotazioni(prenotazioni);
+    	palazzo[Integer.parseInt(room)].setPrenotazioni(prenotazioni);*/
 		return SUCCESS;
 	}
 	
