@@ -60,8 +60,9 @@ public class ResetPasswordAction extends ActionSupport {
 				String oldPassword = users.get(0).getPassword();
 				if (oldPassword.compareTo(newPassword) != 0) {
 					users.get(0).setPassword(newPassword);
-					// TODO Settare la nuova data nel database
-					// TODO Settare il resto dei parametri nella sessione
+					users.get(0).setLastChange(new Date());
+					
+					session.put("ruolo", "A");
 					session.put("orario", new Date().getTime() / 1000);
 				}
 				else return INPUT;

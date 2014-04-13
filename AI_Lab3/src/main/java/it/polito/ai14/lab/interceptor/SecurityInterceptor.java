@@ -18,8 +18,8 @@ public class SecurityInterceptor implements Interceptor {
 
 	public String intercept(ActionInvocation invocation) throws Exception {
     	Map<String, Object> session = ActionContext.getContext().getSession();
-    	
-    	String utente = (String) session.get("username");
+    	// L'utente è loggato solo quando c'è un orario dentro alla sessione.
+    	String utente = (String) session.get("orario");
 
 	    if (utente == null) {
 	        return ActionSupport.LOGIN;
