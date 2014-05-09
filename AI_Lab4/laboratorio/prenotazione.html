@@ -1,0 +1,15 @@
+<div class="container">
+
+	<ul>
+  <li data-ng-repeat="prenotazione in prenotazioni | filter:{$$hashKey: id_prenotazione}">
+    {{prenotazione.nome}} <br>
+    {{prenotazione.data}} - {{prenotazione.ora}}:00 <br>
+    <i>{{prenotazione.descrizione}}</i>
+  </li>
+	</ul>
+
+  <button ng-click="modificaPrenotazione(id_prenotazione)">Modifica</button>
+  <button ng-click="cancellaPrenotazione(id_prenotazione)">Cancella</button>
+
+</div>
+</body>

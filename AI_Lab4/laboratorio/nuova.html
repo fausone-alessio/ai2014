@@ -1,0 +1,14 @@
+<div class="container">
+<h3>Aggiungi prenotazione</h3>
+  Persona:      <input type="text" data-ng-model="newPrenotazione.nome" /><br />
+  Descrizione:  <input type="text" data-ng-model="newPrenotazione.descrizione" /><br />
+  Data:         <input type="date" data-ng-model="newPrenotazione.data"><br />
+  Ora d'inizio: <input type="text" data-ng-model="newPrenotazione.ora" /><br />        
+  <button ng-click="addPrenotazione()">Add</button>
+  
+	<ul>
+  <li data-ng-repeat="prenotazione in prenotazioni">
+    <a href="#/prenotazione/{{prenotazione.$$hashKey}}">{{prenotazione.nome}} - {{prenotazione.data}}</a>
+  </li>
+	</ul>
+</div>

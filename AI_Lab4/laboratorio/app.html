@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html data-ng-app="App4">
+<head>
+  <title>Laboratorio 4</title>
+</head>
+
+<body>
+    <h3>Applicazioni Internet - Laboratorio 4</h3>
+    <a href="#/nuova">Nuova prenotazione</a><br>
+    <a href="#/riepilogo">Visualizza prenotazioni</a>
+    <div data-ng-view="view-container"></div>
+    
+    <script type="text/javascript" src="angular.js"></script>
+    <script type="text/javascript" src="angular-route.js"></script>
+    <script>    
+    var App4 = angular.module('App4', ['ngRoute']);
+  
+    App4.config( ['$routeProvider',
+    	function ($routeProvider) {
+    	$routeProvider
+    		.when('/riepilogo', { controller: 'App4Controller', templateUrl: 'riepilogo.html'})
+        .when('/prenotazione/:pid', { controller: 'App4Controller', templateUrl: 'prenotazione.html'})
+        .when('/nuova',     { controller: 'App4Controller', templateUrl: 'nuova.html' })
+    		.otherwise( { redirectTo: '/riepilogo' });
+    }]);
+    
+
+    App4.factory('App4Factory', function () {
+    	var prenotazioni = [        
+        {nome: 'Riccardo', descrizione: 'Convegno', data: '2014-05-12', ora: '12'},
+        {nome: 'Francesco', descrizione: 'Premiazione', data: '2014-05-12', ora: '13'}
+      ];
+	
+    	var factory = {};
+    	factory.getPrenotazioni = function () { return prenotazioni; }
+      factory.setPrenotazioni = function (pp) { prenotazioni = pp; }
+    	factory.postPrenotazioni = function (p) { prenotazioni.push(p); }
+    	return factory;
+    });
+    
+    /*  Qui avevo provato a fare un altro controller ma poi non riuscivo ad accedere
+        agli utenti nella vista. Ho iniettato routeParams nel vecchio, buono? */
+    App4.controller('App4Controller', function ($scope, App4Factory, $routeParams) {
+    	$scope.prenotazioni = [];
+    	
+    	init();
+    	function init() {
+    		$scope.prenotazioni = App4Factory.getPrenotazioni();
+        $scope.id_prenotazione = $routeParams.pid;
+    	};
+    
+      $scope.cancellaPrenotazione = function (pid) {
+        var prenotazioni = App4Factory.getPrenotazioni();
+        
+        for (var i = 0; i < prenotazioni.length; i++) {
+          if (prenotazioni[i].$$hashKey === pid)
+            var j = i;
+        }
+        prenotazioni.splice(j, 1);
+        /* Devo sovrascriverle nella factory affinchè sia sensato, vero?
+           O basta una modifica nello scope? Secondo me la prima. */
+        App4Factory.setPrenotazioni(pp);    
+    	};
+      
+      $scope.aggiornaPrenotazione = function (pid) {
+        /*  Da terminare: bisogna fare una nuova vista per modificare la
+            prenotazione pid */
+        var prenotazioni = App4Factory.getPrenotazioni();
+        
+        for (var i = 0; i < prenotazioni.length; i++) {
+          if (prenotazioni[i].$$hashKey === pid)
+            var j = i;
+        }
+        alert(j);
+      };
+      
+    	$scope.addPrenotazione = function () {
+        var nome = $scope.newPrenotazione.nome;
+        var descrizione = $scope.newPrenotazione.descrizione;
+        var data = $scope.newPrenotazione.data;
+        var ora = $scope.newPrenotazione.ora;
+        var prenotazioni = App4Factory.getPrenotazioni();
+        var impedisci = false;
+        
+        for (var i = 0; i < prenotazioni.length; i++) {
+          var d = prenotazioni[i].data;
+          var o = prenotazioni[i].ora;
+          if (d === data && o === ora)
+            impedisci = true;
+        }
+       
+        if (!impedisci) {
+          App4Factory.postPrenotazioni({ 
+            nome: $scope.newPrenotazione.nome, 
+            descrizione: $scope.newPrenotazione.descrizione,
+            data: $scope.newPrenotazione.data, 
+            ora: $scope.newPrenotazione.ora 
+          });
+        }
+        else {
+          alert("Impossibile effettuare la prenotazione");
+        }
+    	};
+    });
+    </script>
+</body>
+</html>
