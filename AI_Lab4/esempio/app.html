@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html data-ng-app="myApp">
+<head>
+	<title>Angular-js demo application</title>
+	<link href="css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+	<!-- ng-view handles loading partials into it based 
+             upon routes -->
+	<div ng-include src="'nav.html'"></div>
+	<br/>
+	<div data-ng-view=""></div>
+	<script type="text/javascript" src="angular.js"></script>
+	<script type="text/javascript" src="angular-route.js"></script>
+	<script type="text/javascript" src="angular-resource.js"></script>
+	<script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+
+<script>
+var myApp = angular.module('myApp', ['ngRoute', 'ngResource']);
+
+myApp.config( ['$routeProvider',
+	function ($routeProvider) {
+	$routeProvider
+		.when('/viewA', { controller: 'SimpleController', templateUrl: 'viewA7.html'})
+		.when('/add', { controller: 'SimpleController', templateUrl: 'add8.html'})
+		.when('/edit', { controller: 'SimpleController', templateUrl: 'edit.html'})
+		.when('/viewB', { controller: 'SimpleController', templateUrl: 'viewB7.html'})
+		.otherwise( { redirectTo: '/viewA' });
+}]);
+
+myApp.factory( 'simpleFactory', function ($resource) {
+	
+	return $resource('/persons/:personId');
+
+});
+
+// dependence injection, just put the name of the factory
+myApp.controller('SimpleController', function ($scope, $rootScope, $location, simpleFactory) {
+
+  var slug = $location.path().substring(1);
+  console.log(slug);
+  $rootScope.page = slug;
+
+  $scope.persons = [];
+	
+	(function init() {
+		// data
+		console.log('Initializing persons in the scope');
+		$scope.persons = simpleFactory.query();		// it is now a resource
+	})();
+	
+	// behaviour
+	$scope.addPerson = function () {
+		simpleFactory.save({ name: $scope.newPerson.name, city: $scope.newPerson.city});
+		$scope.persons = simpleFactory.query();
+	};
+	
+	$scope.curPerson = function(id) {
+		$scope.selPerson = simpleFactory.get({personId: id}); 
+		$scope.selPersonId = id;
+		// alert('selPerson:' + id);
+		//$scope.selPerson = 
+	};
+	
+	$scope.updatePerson = function(id) {
+		$scope.selPerson.$save({personId: id}, function(data) {
+			console.log('person object ' + JSON.stringify(data)  + ' saved!');
+		});
+		$scope.persons = simpleFactory.query();
+	}
+
+});
+	
+</script></body>
+</html>

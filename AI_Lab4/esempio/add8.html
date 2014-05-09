@@ -1,0 +1,12 @@
+<div class="container">
+<h3>Add a new person</h3>
+Name: <input type="text" data-ng-model="newPerson.name" /><br />
+City: <input type="text" data-ng-model="newPerson.city" /><br />
+<button ng-click="addPerson()">Add</button>
+<ul>
+<li data-ng-repeat="person in persons | orderBy:'city'">
+	{{person.city | uppercase}} - {{person.name}}
+</li>
+</ul>
+{{persons | json}}
+</div>

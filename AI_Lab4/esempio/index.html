@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html data-ng-app="myApp">
+<head>
+	<title>Angular-js demo application</title>
+</head>
+<body>
+	<script type="text/javascript" src="angular.js"></script>
+	<script type="text/javascript" src="angular-route.js"></script>
+<script>
+var myApp = angular.module('myApp', ['ngRoute']);
+
+myApp.controller('SimpleController', function ($scope) {
+	$scope.persons = [
+		{name: 'Barbara', city: 'Cuneo'},
+		{name: 'Antonio', city: 'Torino'},
+		{name: 'Cristina', city: 'Milano'}	
+	];
+});
+	
+myApp.config( ['$routeProvider',
+	function ($routeProvider) {
+	$routeProvider
+		.when('/', { controller: 'SimpleController', templateUrl: 'viewA7.html'})
+		.when('/viewB', { controller: 'SimpleController', templateUrl: 'viewB7.html'})
+		.otherwise( { redirectTo: '/' });
+}]);
+
+</script></body>
+</html>

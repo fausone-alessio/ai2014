@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html data-ng-app="myApp">
+<head>
+	<title>Angular-js data binding</title>
+</head>
+<body>
+    <!-- was data-ng-model="customer ..." -->
+	<div class="container" data-ng-controller="SimpleController">
+	<h3>Loop through the model supplied by the controller in the scope with ng-repeat</h3>
+	Filter by:
+	<input type="text" data-ng-model="searchText"/>
+	<ul>
+	<li data-ng-repeat="person in persons | filter:searchText | orderBy:'name'">
+		{{person.name}} - {{person.city | uppercase}}
+	</li>
+	</ul>
+	{{names | json}}
+	</div>
+
+	<script type="text/javascript" src="angular.min.js"></script>
+<script>
+var myApp = angular.module('myApp', []);
+myApp.controller('SimpleController', function ($scope) {
+	$scope.persons = [
+		{name: 'Barbara', city: 'Cuneo'},
+		{name: 'Antonio', city: 'Torino'},
+		{name: 'Cristina', city: 'Milano'}	
+	];
+});
+</script></body>
+</html>

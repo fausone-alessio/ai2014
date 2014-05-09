@@ -1,0 +1,15 @@
+<div class="container">
+<h3>Edit person details</h3>
+<ul>
+<li data-ng-repeat="person in persons">
+	<button ng-click="curPerson($index);">{{$index}}</button>  {{person.name}} - {{person.city | uppercase}}
+</li>
+</ul>
+Id: {{selPersonId}}<br/>
+Name: <input type="text" data-ng-model="selPerson.name"/><br/>
+City: <input type="text" data-ng-model="selPerson.city"/><br/>
+<button  ng-click="updatePerson(selPersonId);">Save</button><br/>
+<hr/>
+{{persons | json}}<br/>
+{{selPerson | json}}<br/>
+</div>

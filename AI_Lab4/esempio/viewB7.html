@@ -1,0 +1,9 @@
+<div class="container">
+<h3>View B</h3>
+<ul>
+<li data-ng-repeat="person in persons | orderBy:'city'">
+	{{person.city | uppercase}} - {{person.name}}
+</li>
+</ul>
+{{persons | json}}
+</div>

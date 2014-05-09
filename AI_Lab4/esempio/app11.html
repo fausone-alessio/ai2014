@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html data-ng-app="myApp">
+<head>
+	<title>Angular-js demo application</title>
+</head>
+<body>
+	<!-- ng-view handles loading partials into it based 
+             upon routes -->
+	<ul>
+	<li><a href="#/viewA">View A</a></li>
+	<li><a href="#/viewB">View B</a></li>
+	<li><a href="#/add">Add View</a></li>
+	<li><a href="#/edit">Edit View</a></li>
+	</ul>
+	<div data-ng-view=""></div>
+	<script type="text/javascript" src="angular.js"></script>
+	<script type="text/javascript" src="angular-route.js"></script>
+	<script type="text/javascript" src="angular-resource.js"></script>
+<script>
+var myApp = angular.module('myApp', ['ngRoute', 'ngResource']);
+
+myApp.config( ['$routeProvider',
+	function ($routeProvider) {
+	$routeProvider
+		.when('/viewA', { controller: 'SimpleController', templateUrl: 'viewA7.html'})
+		.when('/add', { controller: 'SimpleController', templateUrl: 'add8.html'})
+		.when('/edit', { controller: 'SimpleController', templateUrl: 'edit10.html'})
+		.when('/viewB', { controller: 'SimpleController', templateUrl: 'viewB7.html'})
+		.otherwise( { redirectTo: '/viewA' });
+}]);
+
+myApp.factory( 'simpleFactory', function ($resource) {
+	
+	return $resource('/persons/:personId');
+
+});
+
+// dependence injection, just put the name of the factory
+myApp.controller('SimpleController', function ($scope, simpleFactory) {
+	$scope.persons = [];
+	
+	(function init() {
+		// data
+		console.log('Initializing persons in the scope');
+		$scope.persons = simpleFactory.query();		// it is now a resource
+	})();
+	
+	// behaviour
+	$scope.addPerson = function () {
+		simpleFactory.postPerson({ name: $scope.newPerson.name, city: $scope.newPerson.city});
+	};
+	
+	$scope.curPerson = function(id) {
+		$scope.selPerson = simpleFactory.get({personId: id}); 
+		// alert('selPerson:' + id);
+		//$scope.selPerson = 
+	};
+
+});
+	
+</script></body>
+</html>

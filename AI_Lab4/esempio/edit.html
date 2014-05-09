@@ -1,0 +1,60 @@
+<div class="container">
+
+<div class="panel panel-default">
+<div class="panel-heading">Persons list</div>
+<div class="panel-body">
+
+<table class="table table-hover">
+<thead>
+<tr>
+<th>#</th>
+<th>Name</th>
+<th>City</th>
+</tr>
+</thead>
+<tbody>
+<tr data-ng-repeat="person in persons">
+<td><button class="btn btn-default" ng-click="curPerson($index);">{{$index}}</button></td>
+<td>{{person.name}}</td>
+<td>{{person.city | uppercase}}</td>
+</tr>
+</tbody>
+</table>
+</div></div>
+
+<div class="panel panel-default">
+<div class="panel-heading">Persons list</div>
+<div class="panel-body">
+<form  class="form-horizontal"  role="form">
+  <div class="form-group">
+   <label for="selPersonId" class="col-sm-2 control-label">Id:</label>
+   <div class="col-sm-2">
+   <input type="number" class="form-control" id="selPersonId" placeholder="{{selPersonId}}">
+   </div>
+   </div>
+     <div class="form-group">
+   <!--div class="col-sm-8"></div-->
+   <label for="selPersonName" class="col-sm-2 control-label">Name:</label>
+   <div class="col-sm-10">
+   <input type="text" class="form-control" id="selPersonName"  data-ng-model="selPerson.name" placeholder="Person's Name">
+   </div>
+   </div>
+     <div class="form-group">
+
+   <label for="selPersonCity" class="col-sm-2 control-label">City:</label>
+   <div class="col-sm-10">
+   <input type="text" class="form-control" id="selPersonCity"  data-ng-model="selPerson.city" placeholder="Person's City">
+   </div>
+   </div>
+     <div class="form-group">
+	     <div class="col-sm-offset-2 col-sm-10">
+<button  class="btn btn-default" ng-click="updatePerson(selPersonId);">Save</button>
+</div>
+</div>
+</form>
+</div></div>
+
+<hr/>
+{{persons | json}}<br/>
+{{selPerson | json}}<br/>
+</div>
